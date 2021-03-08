@@ -2,16 +2,16 @@
 
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
 gem 'sinatra'
-gem 'activerecord', require: 'active_record'
-gem 'sinatra-activerecord', require: 'sinatra/activerecord'
-gem 'rake'
-gem 'require_all'
-gem 'sqlite3'
-gem 'thin'
 gem 'shotgun'
-gem 'pry'
-gem 'bcrypt'
-gem 'rack-flash3', require: 'rack-flash'
+gem 'data_mapper'
+gem 'dm-sqlite-adapter'
+gem 'rack-flash3'
+gem 'sinatra-flash'
+
+group :development, :test do
+  gem 'rspec'
+  gem 'rack-test'
+end

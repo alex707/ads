@@ -1,7 +1,15 @@
-require 'bundler'
-Bundler.require
-ActiveRecord::Base.establish_connection(
-  :adapter => 'sqlite3',
-  :database => 'db/development.sqlite'
-)
-require_all 'app'
+configure :development do
+  DataMapper::Logger.new($stdout, :debug)
+  DataMapper.setup(
+    :default,
+    ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/ads_development.db"
+  )
+end
+
+configure :test do
+  DataMapper::Logger.new($stdout, :debug)
+  DataMapper.setup(
+    :default,
+    ENV['DATABASE_URL'] || "sqlite::memory:"
+  )
+end
