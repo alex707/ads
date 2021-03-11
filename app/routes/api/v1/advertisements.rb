@@ -3,7 +3,7 @@ get '/api/v1/advertisements' do
 end
 
 get '/api/v1/advertisements/:id' do
-  advertisement ||= Advertisement.get(params[:id])
+  advertisement = Advertisement.get(params[:id])
   advertisement.to_json
 end
 
@@ -26,7 +26,7 @@ post '/api/v1/advertisements' do
 end
 
 put '/api/v1/advertisements' do
-  advertisement ||= Advertisement.get(params[:id])
+  advertisement = Advertisement.get(params[:id])
   status 404 and return {}.to_json unless advertisement
 
   advertisement.update!(
@@ -46,7 +46,7 @@ put '/api/v1/advertisements' do
 end
 
 delete '/api/v1/advertisements/:id' do
-  advertisement ||= Advertisement.get(params[:id])
+  advertisement = Advertisement.get(params[:id])
   if advertisement.nil?
     status 404
   else
