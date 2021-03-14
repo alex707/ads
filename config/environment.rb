@@ -1,15 +1,7 @@
-configure :development do
-  DataMapper::Logger.new($stdout, :debug)
-  DataMapper.setup(
-    :default,
-    ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/ads_development.db"
-  )
-end
+ENV['RACK_ENV'] ||= 'development'
 
-configure :test do
-  DataMapper::Logger.new($stdout, :debug)
-  DataMapper.setup(
-    :default,
-    ENV['DATABASE_URL'] || "sqlite::memory:"
-  )
-end
+require 'bundler/setup'
+Bundler.require(:default, ENV['RACK_ENV'])
+
+require_relative 'application_loader'
+ApplicationLoader.load_app!

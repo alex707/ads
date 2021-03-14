@@ -4,14 +4,25 @@ source "https://rubygems.org"
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem 'sinatra'
-gem 'shotgun'
-gem 'data_mapper'
-gem 'dm-sqlite-adapter'
-gem 'rack-flash3'
-gem 'sinatra-flash'
+gem 'rake'
+gem 'puma'
+gem 'sinatra', require: 'sinatra/base'
+gem 'sinatra-contrib'
+gem 'i18n'
+gem 'config'
+gem 'pg', '~> 1.2.3'
+gem 'sequel'
+gem 'dry-initializer'
+gem 'dry-validation'
+
+gem 'activesupport', require: false
+
+gem 'fast_jsonapi'
+
 
 group :development, :test do
   gem 'rspec'
+  gem 'factory_bot'
   gem 'rack-test'
+  gem 'database_cleaner-sequel'
 end

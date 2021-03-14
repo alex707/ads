@@ -1,0 +1,4 @@
+database:
+  url: 'postgres://postgres@localhost/ads_development'
+# db:
+  # database: ads_development

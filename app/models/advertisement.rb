@@ -1,13 +1,18 @@
-class Advertisement
-  include DataMapper::Resource
+class Advertisement < Sequel::Model
+  def validate
+    super
+    validates_presence :city, message: I18n.t(:blank, scope: 'model.errors.advertisement.city')
+    validates_presence :title, message: I18n.t(:blank, scope: 'model.errors.advertisement.title')
+    validates_presence :description, message: I18n.t(:blank, scope: 'model.errors.advertisement.description')
 
-  property :id, Serial
-  property :user_id, Integer, required: true
-  property :title, String, required: true
-  property :description, Text, required: true
-  property :city, String, allow_nil: false
-  property :latitude, Float
-  property :longitude, Float
-  property :created_at, DateTime, allow_nil: false
-  property :updated_at, DateTime, allow_nil: false
+    # validates :presence, %i[title city]
+  end
 end
+
+# class ApplicationRecord < Sequel::Model
+#   def validates(type, attrs)
+#     attrs.each do |attr|
+#       send("validates_#{type}", attr, message: I18n.t())
+#     end
+#   end
+# end
