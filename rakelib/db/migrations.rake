@@ -1,3 +1,5 @@
+# RACK_ENV=development rake db:migrate
+
 namespace :db do
   desc 'Run database migrations'
   task :migrate, %i[version] => :settings do |t, args|

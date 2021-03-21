@@ -16,6 +16,19 @@ RSpec.describe AdvertisementRoutes, type: :routes do
 
   describe 'POST /v1' do
     let(:user_id) { 101 }
+    let(:auth_token) { 'auth.token' }
+    let(:auth_service) { instance_double('Auth service') }
+
+    before do
+      allow(auth_service).to receive(:auth)
+        .with(auth_token)
+        .and_return(user_id)
+
+      allow(AuthService::Client).to receive(:new)
+        .and_return(auth_service)
+
+      header 'Authorization', "Bearer #{auth_token}"
+    end
 
     context 'missing parameters' do
       it 'returns an error' do
@@ -35,7 +48,7 @@ RSpec.describe AdvertisementRoutes, type: :routes do
       end
 
       it 'returns an error' do
-        post '/v1', advertisement: advertisement_params, user_id: user_id
+        post '/v1', advertisement: advertisement_params
 
         expect(last_response.status).to eq(422)
         expect(response_body['errors']).to include(
@@ -46,6 +59,25 @@ RSpec.describe AdvertisementRoutes, type: :routes do
             }
           }
         )
+      end
+    end
+
+    context 'missing user_id' do
+      let(:user_id) { nil }
+
+      let(:advertisement_params) do
+        {
+          title: 'Advertisement title',
+          description: 'Advertisement description',
+          city: 'Some city'
+        }
+      end
+
+      it 'returns an error' do
+        post '/v1', advertisement: advertisement_params
+
+        expect(last_response.status).to eq(403)
+        expect(response_body['errors']).to include('detail' => 'Доступ к ресурсу ограничен')
       end
     end
 
@@ -61,14 +93,14 @@ RSpec.describe AdvertisementRoutes, type: :routes do
       let(:last_advertisement) { Advertisement.last }
 
       it 'creates a new advertisement' do
-        expect { post '/v1', advertisement: advertisement_params, user_id: user_id }
+        expect { post '/v1', advertisement: advertisement_params }
           .to change { Advertisement.count }.from(0).to(1)
 
         expect(last_response.status).to eq(201)
       end
 
       it 'returns an advertisement' do
-        post '/v1', advertisement: advertisement_params, user_id: user_id
+        post '/v1', advertisement: advertisement_params
 
         expect(response_body['data']).to a_hash_including(
           'id' => last_advertisement.id.to_s,

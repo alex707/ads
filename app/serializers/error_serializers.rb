@@ -8,7 +8,7 @@ module ErrorSerializer
   alias from_message from_messages
 
   def from_model(model)
-    { errors: build_message_errors(model.errors) }
+    { errors: build_model_errors(model.errors) }
   end
 
   private
@@ -17,7 +17,7 @@ module ErrorSerializer
     error_messages.map { |message| build_error(message, meta) }
   end
 
-  def build_message_errors(errors)
+  def build_model_errors(errors)
     errors.map do |key, messages|
       messages.map do |message|
         error = build_error(message)

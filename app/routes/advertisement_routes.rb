@@ -1,5 +1,5 @@
 class AdvertisementRoutes < Application
-  helpers PaginationLinks
+  helpers PaginationLinks, Auth
 
   namespace '/v1' do
     get do
@@ -17,7 +17,7 @@ class AdvertisementRoutes < Application
 
       result = Advertisements::CreateService.call(
         advertisement: advertisement_params[:advertisement],
-        user_id: params[:user_id]
+        user_id: user_id
       )
 
       if result.success?
