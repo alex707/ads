@@ -18,6 +18,9 @@ RSpec.describe AdvertisementRoutes, type: :routes do
     let(:user_id) { 101 }
     let(:auth_token) { 'auth.token' }
     let(:auth_service) { instance_double('Auth service') }
+    let(:coordinates) { [45.05, 90.05] }
+    let(:city) { 'City 17' }
+    let(:geo_service) { instance_double('Geo service') }
 
     before do
       allow(auth_service).to receive(:auth)
@@ -26,6 +29,13 @@ RSpec.describe AdvertisementRoutes, type: :routes do
 
       allow(AuthService::Client).to receive(:new)
         .and_return(auth_service)
+
+      allow(geo_service).to receive(:detect)
+        .with(city)
+        .and_return(coordinates)
+
+      allow(GeoService::City).to receive(:new)
+        .and_return(geo_service)
 
       header 'Authorization', "Bearer #{auth_token}"
     end
@@ -39,6 +49,8 @@ RSpec.describe AdvertisementRoutes, type: :routes do
     end
 
     context 'invalid parameters' do
+      let(:coordinates) {  }
+      let(:city) { '' }
       let(:advertisement_params) do
         {
           title: 'Advertisement title',
@@ -69,7 +81,7 @@ RSpec.describe AdvertisementRoutes, type: :routes do
         {
           title: 'Advertisement title',
           description: 'Advertisement description',
-          city: 'Some city'
+          city: 'City 17'
         }
       end
 
@@ -86,7 +98,7 @@ RSpec.describe AdvertisementRoutes, type: :routes do
         {
           title: 'Advertisement title',
           description: 'Advertisement description',
-          city: 'City'
+          city: 'City 17'
         }
       end
 
