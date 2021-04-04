@@ -7,3 +7,6 @@ pagination:
 service:
   auth:
     url: http://localhost:3010/v1
+rabbitmq:
+  consumer_pool:
+    10

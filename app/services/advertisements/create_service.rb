@@ -15,8 +15,6 @@ module Advertisements
     def call
       @advertisement = ::Advertisement.new(@advertisement.to_h)
       @advertisement.user_id = @user_id
-      @advertisement.latitude, @advertisement.longitude =
-        GeoService::City.new.detect(@advertisement.city)
 
       if @advertisement.valid?
         @advertisement.save

@@ -34,7 +34,7 @@ RSpec.describe AdvertisementRoutes, type: :routes do
         .with(city)
         .and_return(coordinates)
 
-      allow(GeoService::City).to receive(:new)
+      allow(GeoService::Client).to receive(:new)
         .and_return(geo_service)
 
       header 'Authorization', "Bearer #{auth_token}"

@@ -14,6 +14,7 @@ gem 'i18n'
 gem 'config'
 gem 'pg', '~> 1.2.3'
 gem 'sequel'
+gem 'bunny'
 gem 'dry-initializer'
 gem 'dry-validation'
 

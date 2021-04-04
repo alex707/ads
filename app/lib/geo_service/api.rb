@@ -1,11 +1,11 @@
 module GeoService
   module Api
-    def detect(name)
-      response = connection.get('city') do |request|
-        request.params[:name] = name
-      end
+    def geocode_later(advertisement)
+      payload = { id: advertisement.id, city_name: advertisement.city }.to_json
+      publish(payload, type: 'geocode')
 
-      response.body if response.success?
+      # type: 'geocode' - описание типа сообщения, которое отправляется в exchange в нашу очередь.
+      # нужен, чтобы при необходимости отличать одно сообщение от другого
     end
   end
 end

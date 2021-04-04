@@ -2,21 +2,28 @@ require 'dry/initializer'
 require_relative 'api'
 
 module GeoService
-  class City
+  class Client
     extend Dry::Initializer[undefined: false]
     include Api
 
-    option :url, default: proc { 'http://localhost:3015/v1' }
-    option :connection, default: proc { build_connection }
+    option :queue, default: proc { create_queue }
 
-    private
+    def create_queue
+      channel = RabbitMq.channel
+      channel.queue('geo', durable: true)
+    end
 
-    def build_connection
-      Faraday.new(@url) do |conn|
-        conn.request :json
-        conn.response :json, content_type: /\bjson$/
-        conn.adapter Faraday.default_adapter
-      end
+    def publish(payload, opts = {})
+      @queue.publish(
+        payload,
+        opts.merge(
+          persistent: true,
+          app_id: 'ads'
+        )
+      )
+
+      # persistent: true - сообщения сохр на диск
+      # app_id: 'ads' - id сервиса, кот опубликовал сообщение
     end
   end
 end
