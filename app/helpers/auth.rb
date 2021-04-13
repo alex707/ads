@@ -12,7 +12,7 @@ module Auth
   private
 
   def auth_service
-    @auth_service ||= AuthService::Client.new
+    @auth_service ||= AuthService::Client.fetch
   end
 
   def matched_token
