@@ -9,6 +9,7 @@ module Advertisements
     end
 
     option :user_id
+    option :geo_service, default: proc { GeocoderService::Client.new }
 
     attr_reader :advertisement
 
@@ -18,6 +19,7 @@ module Advertisements
 
       if @advertisement.valid?
         @advertisement.save
+        @geo_service.geocode_later(@advertisement)
       else
         fail!(@advertisement.errors)
       end
