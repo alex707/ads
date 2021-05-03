@@ -1,8 +1,3 @@
-# token = 'eyJhbGciOiJIUzI1NiJ9.eyJ1dWlkIjoiNmFiZGQ0ZjEtMDBkNC00NWE3LThhMGEtMzU2NGMzOThmOWUyIn0.k5OAp3OpX4PQhFPMFzt8VOStrn9xOyBzylGU6Hhzecw'
-# auth_client = AuthService::Client.fetch
-# user_id = auth_client.auth(token)
-
-require 'securerandom'
 require 'dry/initializer'
 require_relative 'api'
 
@@ -70,8 +65,6 @@ module AuthService
 
         @condition.wait(@lock)
       end
-
-      @user_id
     end
   end
 end
