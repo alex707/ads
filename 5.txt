@@ -74,7 +74,6 @@ class Producer
     @channel.default_exchange.publish(payload, routing_key: @queue.name)
 
     # паблишинг напрямую в очередь (на самом деле так же через дефолтный exchange)
-    # в этом случае, routing_key имеет такое же название, как и название очереди
     # @channel.publish(payload)
   ensure
     @connection.close
