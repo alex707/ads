@@ -10,7 +10,7 @@ queue.subscribe do |delivery_info, properties, payload|
 
   exchange.publish(
     '',
-    routing_key: properties.reply_to, # сюда придёт дефолтная очередь
+    routring_key: properties.reply_to, # дефолтная очередь
     correlation_id: properties.correlation_id
   )
 end
