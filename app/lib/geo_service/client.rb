@@ -8,9 +8,11 @@ module GeoService
 
     option :queue, default: proc { create_queue }
 
+    private
+
     def create_queue
       channel = RabbitMq.channel
-      channel.queue('geo', durable: true)
+      channel.queue('geocoding', durable: true)
     end
 
     def publish(payload, opts = {})
