@@ -18,7 +18,6 @@ module AuthService
     option :lock, default: proc { Mutex.new }
     option :condition, default: proc { ConditionVariable.new }
     option :user_id, optional: true
-    option :exchange, default: proc { create_exchange }
 
     def self.fetch
       Thread.current['auth_service.rpc_client'] ||= new.start
@@ -30,17 +29,11 @@ module AuthService
           Thread.current['user_id'] = JSON.parse(payload)['user_id']
 
           @lock.synchronize do
+            # не обязательно присваивать user_id в текущий трэд,
+            # можно просто в блоке synchronize присвоить результат в @user_id
             @user_id = Thread.current['user_id']
             @condition.signal
           end
-
-          exchange.publish(
-            '',
-            routing_key: 'auth',
-            correlation_id: properties.correlation_id,
-            user_id: @user_id,
-            app_id: 'auth',
-          )
         end
       end
 
@@ -59,11 +52,6 @@ module AuthService
     def create_reply_user_id_queue
       channel = RabbitMq.channel
       channel.queue('auth-user-id', durable: true)
-    end
-
-    def create_exchange
-      channel = RabbitMq.channel
-      channel.default_exchange
     end
 
     def publish(payload, opts = {})
